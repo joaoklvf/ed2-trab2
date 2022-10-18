@@ -58,4 +58,6 @@ int incrementHeaderCounter(FILE *mainFile, int index, int increment);
 void mergeSortByCities(searchKeyRecord *arr, int l, int r);
 void mergeByCities(searchKeyRecord *arr, int l, int m, int r);
 void printArray(searchKeyRecord *L, int size);
+int writeOffsetFile(searchKeyRecord *searchKeyRecords);
+
 #endif
