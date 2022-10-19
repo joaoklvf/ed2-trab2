@@ -106,9 +106,9 @@ int writeOffsetFile(searchKeyRecord *searchKeyRecords)
 	int i;
 	for (i = 0; i < numOfLines; i++)
 	{
-		fwrite(&searchKeyRecords[i].cod_cli, 11, 1, offsetFile);
-		fwrite(&searchKeyRecords[i].cod_vei, 7, 1, offsetFile);
-		fwrite(&searchKeyRecords[i].offset, 1, 1, offsetFile);
+		fwrite(searchKeyRecords[i].cod_cli, 11, 1, offsetFile);
+		fwrite(searchKeyRecords[i].cod_vei, 7, 1, offsetFile);
+		fwrite(&searchKeyRecords[i].offset, sizeof(int), 1, offsetFile);
 	}
 	fclose(offsetFile);
 	return 1;
@@ -233,21 +233,25 @@ int readCreateFiles(loadedFileDto *retorno, FILE *mainFile, searchKeyRecord *key
 			// 	printf("nao abriu o arquivo de offsets\n");
 			// 	return 0;
 			// }
-			char codCli[11];
 			fseek(offsetsFile, OFFSETS_HEADER_INITIAL_REGISTER_POSITION, 0);
-			fread(&codCli, 11, 1, offsetsFile);
-			printf("aq: %s\n", codCli);
-			while (strlen(aux.cod_cli) > 0)
+			int founded = 0;
+			while (founded == 0)
 			{
+				fread(&aux.cod_cli, 11, 1, offsetsFile);
 				fread(&aux.cod_vei, 7, 1, offsetsFile);
-				fread(&aux.offset, 1, 1, offsetsFile);
+				fread(&aux.offset, sizeof(int), 1, offsetsFile);
 				keysRecords[counter] = aux;
 				counter++;
-				fread(&aux.cod_cli, 7, 1, offsetsFile);
+				// Se for fim do arquivo, marcar founded como 1 e sair do loop
+				if (feof(offsetsFile))
+				{
+					founded = 1;
+				}
 			}
 		}
 		fclose(mainFile);
-		// fwrite(&OFFSET_ISNT_ORGANIZED_CHAR, sizeof(char), 1, offsetsFile);
+		fseek(offsetsFile, OFFSETS_HEADER_IS_SORTED_INDEX, 0);
+		fwrite(&OFFSET_ISNT_ORGANIZED_CHAR, sizeof(char), 1, offsetsFile);
 	}
 	fclose(offsetsFile);
 	return 0;
@@ -303,7 +307,7 @@ int inserir(loadedFileDto *loadedFiles, searchKeyRecord *searchKeyRecordToAdd, F
 	if (op > existingRecords - 1 || op < 0)
 	{
 		printf("Indice nao permitido.\n");
-		return NULL;
+		return -1;
 	}
 
 	// Pega quantidade de dados inseridos e verifica se ja atingiu o limite permitido
