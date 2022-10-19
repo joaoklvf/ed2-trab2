@@ -2,6 +2,9 @@
 
 int main()
 {
+	// TODO: ORDENAR ARRAY A CADA INSERÇÃO
+	// FAZER O MÉTODO DE BUSCA
+	// SUBSTITUIR O MERGE SORT POR BUILT-IN DO C++
 	setlocale(LC_ALL, "Portuguese");
 	FILE *mainFile;
 	int option = -1;
@@ -29,6 +32,7 @@ int main()
 			int indexToAdd = getHeaderData(mainFile, HEADER_ADDED_COUNTER_INDEX);
 			inserir(&loadedFiles, &aux, mainFile);
 			searchKeyRecords[indexToAdd] = aux;
+			// TODO: ORDENAR ARRAY A CADA INSERÇÃO
 			fclose(mainFile);
 		}
 		else if (option == 2)
@@ -213,7 +217,7 @@ int readCreateFiles(loadedFileDto *retorno, FILE *mainFile, searchKeyRecord *key
 			fseek(mainFile, HEADER_INITIAL_REGISTER_POSITION, 0);
 			tam_reg = pega_registro(mainFile, registro);
 			aux.offset = ftell(mainFile);
-			printf("Campo: %s\n", registro);
+			
 			while (tam_reg > 0)
 			{
 				pos = 0;
@@ -227,15 +231,9 @@ int readCreateFiles(loadedFileDto *retorno, FILE *mainFile, searchKeyRecord *key
 		}
 		else
 		{
-			// Preciso reconstruir o array com o arquivo de offsets
-			// if ((offsetsFile = fopen("ofssets.bin", "r+b")) == NULL)
-			// {
-			// 	printf("nao abriu o arquivo de offsets\n");
-			// 	return 0;
-			// }
 			fseek(offsetsFile, OFFSETS_HEADER_INITIAL_REGISTER_POSITION, 0);
-			int founded = 0;
-			while (founded == 0)
+			int isEndOfFile = 0;
+			while (isEndOfFile == 0)
 			{
 				fread(&aux.cod_cli, 11, 1, offsetsFile);
 				fread(&aux.cod_vei, 7, 1, offsetsFile);
@@ -245,7 +243,7 @@ int readCreateFiles(loadedFileDto *retorno, FILE *mainFile, searchKeyRecord *key
 				// Se for fim do arquivo, marcar founded como 1 e sair do loop
 				if (feof(offsetsFile))
 				{
-					founded = 1;
+					isEndOfFile = 1;
 				}
 			}
 		}
