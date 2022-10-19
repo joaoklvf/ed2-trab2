@@ -1,4 +1,4 @@
-#ifndef TRABALHO_H   
+#ifndef TRABALHO_H
 #define TRABALHO_H
 
 #include <stdio.h>
@@ -8,16 +8,16 @@
 #include <locale.h>
 
 #define HEADER_ADDED_COUNTER_INDEX 0
-#define HEADER_REMOVED_COUNTER_INDEX 4
-#define HEADER_LAST_REMOVED_INDEX 8
-#define HEADER_INITIAL_REGISTER_POSITION 12
+#define HEADER_RESEARCHED_COUNTER_INDEX 4
+#define HEADER_INITIAL_REGISTER_POSITION 8
 
 #define OFFSETS_HEADER_IS_SORTED_INDEX 0
 #define OFFSETS_HEADER_INITIAL_REGISTER_POSITION 1
 #define OFFSET_ISNT_ORGANIZED_CHAR "#"
 #define OFFSET_IS_ORGANIZED_CHAR "*"
 
-struct record {
+struct record
+{
     char cod_cli[12];
     char cod_vei[8];
     char client[50];
@@ -25,24 +25,27 @@ struct record {
     char dias[4];
 };
 
-struct searchKey {
+struct searchKey
+{
     char cod_cli[12];
     char cod_vei[8];
 };
 
-struct searchKeyRecord {
+struct searchKeyRecord
+{
     char cod_cli[12];
     char cod_vei[8];
     int offset;
 };
 
-struct header{
-	int addedCounter;
-	int searchedCounter;
-	int lastAdded;
+struct header
+{
+    int addedCounter;
+    int searchedCounter;
 };
 
-struct loadedFileDto {
+struct loadedFileDto
+{
     record records[25];
     searchKey keys[25];
 };
@@ -53,11 +56,12 @@ int readCreateFiles(loadedFileDto *retorno, FILE *mainFile, searchKeyRecord *key
 int inserir(loadedFileDto *loadedFiles, searchKeyRecord *searchKeyRecordToAdd, FILE *mainFile);
 int search(loadedFileDto *loadedFiles, FILE *mainFile);
 int getHeaderData(FILE *mainFile, int index);
-FILE* openFile(FILE *mainFile);
+FILE *openFile(FILE *mainFile);
 int incrementHeaderCounter(FILE *mainFile, int index, int increment);
 void mergeSortByCities(searchKeyRecord *arr, int l, int r);
 void mergeByCities(searchKeyRecord *arr, int l, int m, int r);
 void printArray(searchKeyRecord *L, int size);
-int writeOffsetFile(searchKeyRecord *searchKeyRecords);
+int writeOffsetFile(searchKeyRecord *searchKeyRecords, int addedCounter);
+void sortSearchKeyRecords(searchKeyRecord *keys, int size);
 
 #endif

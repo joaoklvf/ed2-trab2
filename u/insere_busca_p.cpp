@@ -13,9 +13,9 @@ int main() {
         char dias[4];
     } veic_t;
 	
-	veic_t regs_locs_vei[8] = {	{"11111111111", "ABC1234", "Cliente-1", "Veiculo-11", "2"},
+	veic_t regs_locs_vei[8] = {	{"33333333333", "CDE9874", "Cliente-3", "Veiculo-33", "1"},
+								{"11111111111", "ABC1234", "Cliente-1", "Veiculo-11", "2"},
 		                		{"22222222222", "ABC1234", "Cliente-2", "Veiculo-11", "8"},
-		                		{"33333333333", "CDE9874", "Cliente-3", "Veiculo-33", "1"},
 		                		{"44444444444", "ERT4561", "Cliente-4", "Veiculo-44", "11"},
 		                		{"11111111111", "ERT4561", "Cliente-1", "Veiculo-44", "2"},
 		                		{"11111111111", "UJG3574", "Cliente-1", "Veiculo-66", "3"},
